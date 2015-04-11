@@ -14,7 +14,7 @@
 #define DYNAMENT_READ_LIVEDATA          (0x01)
 #define DYNAMENT_READ_LIVEDATA_SIMPLE   (0x06)
 
-#define DYNAMENT_USART_RX_MAX_LEN               30
+#define DYNAMENT_USART_RX_MAX_LEN               20
 
 typedef struct {
         uint8_t     *pu8Data;
@@ -29,19 +29,14 @@ typedef struct {
         float       fReading;
 }dynament_rx_simple_t;
 
-typedef enum {
-        RX_IDLE,
-        RX_START,
-        RX_OK,
-        RX_ERROR
-}dynament_rx_status_t;
-
-extern dynament_rx_status_t dynament_usart_rx_status;
+extern dynament_rx_t dynament_rx;
 extern int8_t dynament_usart_rx_index;
 extern int8_t dynament_usart_rx_flag;
 extern uint8_t dynament_usart_rx_buffer[];
+extern int8_t dynament_usart_rx_flag;
 
-void ReadLiveData(void);
+void ReadLiveDataSimple(void);
 int8_t CheckSum(uint8_t *buffer,int16_t size,uint16_t checksum);
+uint32_t Translateu8ArrayTou32(uint8_t *pu8Array);
 
 #endif      // End of #ifndef __DYNAMENT_H__

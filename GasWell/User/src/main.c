@@ -128,6 +128,9 @@ void NVIC_Configuration(void)
 ****************************************************************************/
 int main(void)
 {	
+    uint16_t timeout = 0;
+    uint32_t u32GasReading = 0;
+    
     GPIO_Configuration();
     USART_Configuration();
     NVIC_Configuration();
@@ -140,22 +143,34 @@ int main(void)
     dynament_usart_rx_index = 0;
     while(1)
 	{
-        ReadLiveData();
-        printf("receive data:\r\n");
-        if(dynament_usart_rx_flag == 2)                           // usart receive data
+        ReadLiveDataSimple();
+        timeout = 10;
+        while((!dynament_usart_rx_flag) && (--timeout))
         {
-            dynament_usart_rx_flag = 0;
-            uint16_t checksum = (dynament_usart_rx_buffer[17] << 8) | dynament_usart_rx_buffer[18];
-            if(!CheckSum(dynament_usart_rx_buffer,17,checksum))
+            printf("dynament_usart_rx_flag = %d,timeout = %d.\r\n",dynament_usart_rx_flag,timeout);
+            Delay_ms(100);
+        }
+        dynament_usart_rx_flag = 0;
+        
+        if(timeout)
+        {
+            uint16_t checksum = (dynament_usart_rx_buffer[dynament_rx.len - 2] << 8) | dynament_usart_rx_buffer[dynament_rx.len - 1];
+            if(!CheckSum(dynament_usart_rx_buffer,dynament_rx.len - 2,checksum))
             {
                 printf("Check OK.\r\n");
             }
-            printf("receive dynament data.\r\n");
+            printf("receive data:\r\n");
             for(int i = 0;i < DYNAMENT_USART_RX_MAX_LEN;i ++)
             {
                  printf("%d = 0x%x.\r\n",i,dynament_usart_rx_buffer[i]);
             }
+            u32GasReading = Translateu8ArrayTou32(&dynament_usart_rx_buffer[6]);
+            printf("u32GasReading = %f.\r\n",((float)u32GasReading) / 4294967296);
             printf("\r\n");
+        }
+        else
+        {
+            printf("timeout.\r\n");
         }
         Delay_ms(2000);
 	}

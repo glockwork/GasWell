@@ -257,43 +257,39 @@ void EXTI9_5_IRQHandler(void)
 
 void USART2_IRQHandler(void)
 {
-    static uint8_t rx_temp_backup = 0;
-    
     if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
     {
          /* Clear the EXTI line10 pending bit */
         USART_ClearITPendingBit(USART2, USART_IT_RXNE);
         
         dynament_usart_rx_buffer[dynament_usart_rx_index] = USART_ReceiveData(USART2);
-//        printf("%d,0x%x\r\n",dynament_usart_rx_index,dynament_usart_rx_buffer[dynament_usart_rx_index-1]);
         if(dynament_usart_rx_index)
         {
             if(dynament_usart_rx_buffer[dynament_usart_rx_index - 1] == DYNAMENT_DLE)
             {
-                if(dynament_usart_rx_buffer[dynament_usart_rx_index] == DYNAMENT_DLE)
-                {
-                    dynament_usart_rx_index --;
-                }
-                else if(dynament_usart_rx_buffer[dynament_usart_rx_index] == DYNAMENT_DAT)
+                if(dynament_usart_rx_buffer[dynament_usart_rx_index] == DYNAMENT_DAT)
                 {
                     dynament_usart_rx_index = 1;
                 }
-                else if(dynament_usart_rx_buffer[dynament_usart_rx_index] == DYNAMENT_EOF)
+                else if(dynament_usart_rx_buffer[dynament_usart_rx_index] == DYNAMENT_DLE)
                 {
-                    dynament_usart_rx_flag = 1;
-                    rx_temp_backup = dynament_usart_rx_index;
+                    dynament_usart_rx_index --;
                 }
             }
         }
-        
         dynament_usart_rx_index ++;
-        if(dynament_usart_rx_flag == 1)
+        
+        if(dynament_usart_rx_index >= (dynament_usart_rx_buffer[2] + 7))
         {
-            if(dynament_usart_rx_index >= (rx_temp_backup + 2))
-            {
-                dynament_usart_rx_flag = 2;
-                printf("dynament_usart_rx_flag = 2\r\n");
-            }
+            dynament_rx.pu8Data = dynament_usart_rx_buffer;
+            dynament_rx.len = dynament_usart_rx_buffer[2] + 7;
+            dynament_usart_rx_flag = 1;
+            dynament_usart_rx_index = 0;
+            printf("dynament_usart_rx_flag = 1\r\n");
+        }
+        else if(dynament_usart_rx_index >= DYNAMENT_USART_RX_MAX_LEN)
+        {
+            dynament_usart_rx_index = 0;
         }
     }
 }

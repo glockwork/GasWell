@@ -2,11 +2,25 @@
 #include "usart.h"
 #include <stdio.h>
 
-dynament_rx_status_t dynament_usart_rx_status;
+dynament_rx_t dynament_rx;
 int8_t dynament_usart_rx_index = 0;
 int8_t dynament_usart_rx_flag = 0;
 uint8_t dynament_usart_rx_buffer[DYNAMENT_USART_RX_MAX_LEN] = {0};
 uint8_t tx_buffer[7];
+
+/*******************************************************************************
+* @brief   Translates 32-bit to 8-bit array.
+* @param   u32Temp:the src data to be translated
+* @param   pu8Array:the dest data addr
+* @retval  void
+*******************************************************************************/
+uint32_t Translateu8ArrayTou32(uint8_t *pu8Array)
+{
+    assert_param(pu8Array != NULL);
+    
+    return (((uint32_t)(*pu8Array)) + (((uint32_t)(*(pu8Array + 1))) << 8) + 
+            ((uint32_t)(*(pu8Array + 2)) << 16) + ((uint32_t)(*(pu8Array + 3)) << 24));
+}
 
 uint16_t GetCheckSum(uint8_t *buffer,int16_t size)
 {
@@ -23,20 +37,24 @@ uint16_t GetCheckSum(uint8_t *buffer,int16_t size)
 int8_t CheckSum(uint8_t *buffer,int16_t size,uint16_t checksum)
 {
     int8_t state = 0;
+    uint16_t checksum_tmp = 0;
     
-    if(GetCheckSum(buffer,size) == checksum)
+    checksum_tmp = GetCheckSum(buffer,size);
+    if(checksum_tmp == checksum)
     {
+        printf("Check OK.\r\n");
         state = 0;
     }
     else
     {
+        printf("Check error:checksum_tmp = 0x%x,checksum = 0x%x\r\n",checksum_tmp,checksum);
         state = -1;
     }
     
     return state;
 }
 
-void ReadLiveData(void)
+void ReadLiveDataSimple(void)
 {
     uint16_t checksum = 0;
 
