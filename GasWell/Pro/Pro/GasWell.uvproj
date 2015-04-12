@@ -479,7 +479,7 @@
             <File>
               <FileName>startup_stm32l1xx_hd.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\startup_stm32l1xx_hd.s</FilePath>
+              <FilePath>..\..\Libraries\startup\startup_stm32l1xx_hd.s</FilePath>
             </File>
           </Files>
         </Group>

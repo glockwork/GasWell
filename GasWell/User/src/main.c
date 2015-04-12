@@ -18,8 +18,6 @@
 #define ADC_MEASUREMENT_GPIO_PORT        GPIOB                /* GPIOF */
 #define ADC_MEASUREMENT_ADC_CHANNEL      ADC_Channel_8        /* ADC channel1b */
 
-dynament_rx_simple_t dynament_rx_simple,* pDynament_rx_simple;
-
 uint32_t ADCValue=0,ADCValue1=0;
 /* Private function prototypes -----------------------------------------------*/
 
@@ -129,7 +127,7 @@ void NVIC_Configuration(void)
 int main(void)
 {	
     uint16_t timeout = 0;
-    uint32_t u32GasReading = 0;
+    float fGasReading = 0;
     
     GPIO_Configuration();
     USART_Configuration();
@@ -137,6 +135,7 @@ int main(void)
     Delay_ms(10);
     printf("Hello.\r\n");
     
+    /* Enable the power of dynament sensor. */
     GPIO_ResetBits(GPIO_Port_9V_EN, GPIO_Pin_9V_EN);
     GPIO_SetBits(GPIO_Port_DYNAMENT_3V3_EN, GPIO_Pin_DYNAMENT_3V3_EN);
     
@@ -164,8 +163,8 @@ int main(void)
             {
                  printf("%d = 0x%x.\r\n",i,dynament_usart_rx_buffer[i]);
             }
-            u32GasReading = Translateu8ArrayTou32(&dynament_usart_rx_buffer[6]);
-            printf("u32GasReading = %f.\r\n",((float)u32GasReading) / 4294967296);
+            fGasReading = Convertu32Tofloat(Convertu8ArrayTou32(&dynament_usart_rx_buffer[6]));
+            printf("fGasReading = %f.\r\n",fGasReading);
             printf("\r\n");
         }
         else

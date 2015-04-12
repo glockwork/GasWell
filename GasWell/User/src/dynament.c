@@ -9,12 +9,12 @@ uint8_t dynament_usart_rx_buffer[DYNAMENT_USART_RX_MAX_LEN] = {0};
 uint8_t tx_buffer[7];
 
 /*******************************************************************************
-* @brief   Translates 32-bit to 8-bit array.
-* @param   u32Temp:the src data to be translated
+* @brief   Convert a 8-bit array to a 32-bit variable.
+* @param   u32Temp:the src data to be converted
 * @param   pu8Array:the dest data addr
-* @retval  void
+* @retval  a 32-bit variable
 *******************************************************************************/
-uint32_t Translateu8ArrayTou32(uint8_t *pu8Array)
+uint32_t Convertu8ArrayTou32(uint8_t *pu8Array)
 {
     assert_param(pu8Array != NULL);
     
@@ -42,12 +42,18 @@ int8_t CheckSum(uint8_t *buffer,int16_t size,uint16_t checksum)
     checksum_tmp = GetCheckSum(buffer,size);
     if(checksum_tmp == checksum)
     {
-        printf("Check OK.\r\n");
+        #ifdef DYNAMENT_DEBUG
+            printf("Check OK.\r\n");
+        #endif
+        
         state = 0;
     }
     else
     {
-        printf("Check error:checksum_tmp = 0x%x,checksum = 0x%x\r\n",checksum_tmp,checksum);
+        #ifdef DYNAMENT_DEBUG
+            printf("Check error:checksum_tmp = 0x%x,checksum = 0x%x\r\n",checksum_tmp,checksum);
+        #endif
+        
         state = -1;
     }
     
@@ -68,12 +74,23 @@ void ReadLiveDataSimple(void)
     tx_buffer[5] = checksum >> 8;
     tx_buffer[6] = checksum;
     
-    printf("send data:\r\n");
-    for(int i = 0;i < sizeof(tx_buffer);i ++)
-    {
-        printf("0x%x,",tx_buffer[i]);
-    }
-    printf("\r\n");
+    #ifdef DYNAMENT_DEBUG    
+        printf("send data:\r\n");
+        for(int i = 0;i < sizeof(tx_buffer);i ++)
+        {
+            printf("0x%x,",tx_buffer[i]);
+        }
+        printf("\r\n");
+    #endif 
     
     Usart2_SendData(tx_buffer, sizeof(tx_buffer));
+}
+
+float Convertu32Tofloat(uint32_t temp)
+{
+    u32orfloat_u u32orfloat;
+    
+    u32orfloat.u32Value = temp;
+    
+    return (u32orfloat.fValue);
 }

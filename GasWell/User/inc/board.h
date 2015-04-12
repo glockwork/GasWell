@@ -4,6 +4,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l1xx.h" 
 
+#define DYNAMENT_DEBUG
+
 /******************************* Define for Dynament ****************************/
 #define DYNAMENT_USART                  USART2
 
