@@ -13,6 +13,7 @@
 #include "board.h"
 #include "usart.h"
 #include "dynament.h"
+#include "dynamentMonitor.h"
 
 #define ADC_MEASUREMENT_PIN              GPIO_Pin_0           /* PF.11 */
 #define ADC_MEASUREMENT_GPIO_PORT        GPIOB                /* GPIOF */
@@ -135,13 +136,23 @@ int main(void)
     Delay_ms(10);
     printf("Hello.\r\n");
     
+    GPIO_ResetBits(GPIOC, GPIO_Pin_4);
+    
     /* Enable the power of dynament sensor. */
     GPIO_ResetBits(GPIO_Port_9V_EN, GPIO_Pin_9V_EN);
     GPIO_SetBits(GPIO_Port_DYNAMENT_3V3_EN, GPIO_Pin_DYNAMENT_3V3_EN);
     
+    for(int i = 0;i < 60;i ++)
+    {
+        printf("%d\r\n",i);
+        Delay_ms(400);
+    }
+
     dynament_usart_rx_index = 0;
     while(1)
 	{
+//        DynamentVoltDetect();
+        GPIO_ResetBits(GPIOC, GPIO_Pin_4);
         ReadLiveDataSimple();
         timeout = 10;
         while((!dynament_usart_rx_flag) && (--timeout))
@@ -163,7 +174,7 @@ int main(void)
             {
                  printf("%d = 0x%x.\r\n",i,dynament_usart_rx_buffer[i]);
             }
-            fGasReading = Convertu32Tofloat(Convertu8ArrayTou32(&dynament_usart_rx_buffer[6]));
+            fGasReading = Convertu32Tofloat(Convertu8ArrayTou32(&dynament_usart_rx_buffer[7]));
             printf("fGasReading = %f.\r\n",fGasReading);
             printf("\r\n");
         }
@@ -171,7 +182,8 @@ int main(void)
         {
             printf("timeout.\r\n");
         }
-        Delay_ms(2000);
+        GPIO_SetBits(GPIOC, GPIO_Pin_4);
+        Delay_ms(1000);
 	}
 }
 
@@ -305,4 +317,26 @@ uint32_t IDD_Measurement_VDD(void)
   return adcdata;
 }
 
+#ifdef USE_ASSERT
+
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t* file, uint32_t line)
+{ 
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+    
+    printf("Wrong parameters value: file %s on line %d\r\n", file, line) ;
+    
+    /* Infinite loop */
+    while (1)
+    {
+    }
+}
+#endif
 

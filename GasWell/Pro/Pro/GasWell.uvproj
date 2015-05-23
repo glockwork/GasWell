@@ -348,7 +348,7 @@
             <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
-            <OneElfS>0</OneElfS>
+            <OneElfS>1</OneElfS>
             <Strict>0</Strict>
             <EnumInt>0</EnumInt>
             <PlainCh>0</PlainCh>
@@ -361,7 +361,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>USE_STDPERIPH_DRIVER,STM32L1XX_MD</Define>
+              <Define>USE_STDPERIPH_DRIVER,STM32L1XX_MD USE_ASSERT</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\Libraries\CMSIS\CM3\DeviceSupport\inc;..\..\Libraries\CMSIS\CM3\CoreSupport\inc;..\..\Libraries\STM32L1xx_StdPeriph_Driver\inc;..\..\User\inc</IncludePath>
             </VariousControls>
@@ -430,6 +430,11 @@
               <FileName>dynament.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\src\dynament.c</FilePath>
+            </File>
+            <File>
+              <FileName>dynamentMonitor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\src\dynamentMonitor.c</FilePath>
             </File>
           </Files>
         </Group>

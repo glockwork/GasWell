@@ -31,6 +31,7 @@
 #include "stm32l1xx_it.h"
 #include <stdio.h>
 #include "dynament.h"
+#include "dynamentMonitor.h"
 
 /** @addtogroup Template_Project
   * @{
@@ -155,11 +156,26 @@ void EXTI0_IRQHandler(void)
 
 }
 
+/**
+  * @brief  This function handles DMA1_Channel1 exception.
+  * @param  None
+  * @retval None
+  */
+void DMA1_Channel1_IRQHandler(void)
+{
+    #ifdef DYNAMENT_DEBUG
+    printf("DMA1_Channel1_IRQHandler.\r\n");
+    #endif
+    DMA_ClearFlag(DMA1_IT_TC1);
+    SetADCDMA_TransferComplete();
+}
+
 void DMA1_Channel6_IRQHandler(void)
 {
 //    printf("DMA1_Channel6_IRQHandler\r\n");
 //    DMA_ClearFlag(DMA1_IT_TC6);
 }
+
 
 void EXTI15_10_IRQHandler(void)
 {
