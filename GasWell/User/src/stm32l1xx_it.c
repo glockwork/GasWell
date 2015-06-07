@@ -29,9 +29,11 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l1xx_it.h"
+#include "board.h"
 #include <stdio.h>
 #include "dynament.h"
 #include "dynamentMonitor.h"
+#include "liquid_level.h"
 
 /** @addtogroup Template_Project
   * @{
@@ -176,6 +178,14 @@ void DMA1_Channel6_IRQHandler(void)
 //    DMA_ClearFlag(DMA1_IT_TC6);
 }
 
+void EXTI9_5_IRQHandler(void)
+{
+    if(EXTI_GetITStatus(EXTI_Line_LIQUID_LEVEL) != RESET)
+    {
+        EXTI_ClearITPendingBit(EXTI_Line_LIQUID_LEVEL);
+        LIQUID_LEVEL_Interrupt_Handler();
+    }
+}
 
 void EXTI15_10_IRQHandler(void)
 {
@@ -257,19 +267,7 @@ void RTC_WKUP_IRQHandler(void)
 {
 
 }
-void EXTI9_5_IRQHandler(void)
-{
-	#ifdef BOARD_REDHARE_V3_0
-		
-		if(EXTI_GetITStatus(PT_EXTI_LineBTSYNC) != RESET) //PC5 51822通知STM32发送数据
-		{
-			 /* Clear the EXTI line10 pending bit */
-			EXTI_ClearITPendingBit(PT_EXTI_LineBTSYNC);
-			gWakeUpNeedOLEDON = SET;
-			TS_SendEvent(gTsSyncDataTaskID_c,gSyncDataEventSPISent);   //触发SPI发送数据事件
-		}
-	#endif
-}
+
 
 void USART2_IRQHandler(void)
 {

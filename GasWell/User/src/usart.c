@@ -151,9 +151,9 @@ int fputc(int ch, FILE *f)
 
 void Usart_SendStrings(uint8_t *str)
 {
-    uint8_t ch;
     uint8_t i=0;
-    ch=str[0];
+    uint8_t ch = *str;
+    
     while(ch != '\0')
     {
         ch = str[i++];
@@ -164,7 +164,6 @@ void Usart_SendStrings(uint8_t *str)
 
 void Usart2_SendData(uint8_t *str, int16_t len)
 {
-    uint8_t ch;
     uint8_t i=0;
 
     if((str != NULL) && (len > 0))

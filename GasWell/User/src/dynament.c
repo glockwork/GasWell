@@ -22,7 +22,13 @@ uint32_t Convertu8ArrayTou32(uint8_t *pu8Array)
             ((uint32_t)(*(pu8Array + 2)) << 16) + ((uint32_t)(*(pu8Array + 3)) << 24));
 }
 
-uint16_t GetCheckSum(uint8_t *buffer,int16_t size)
+/*******************************************************************************
+* @brief   Convert a 8-bit array to a 32-bit variable.
+* @param   u32Temp:the src data to be converted
+* @param   pu8Array:the dest data addr
+* @retval  a 32-bit variable
+*******************************************************************************/
+uint16_t ComputeCheckSum(uint8_t *buffer,int16_t size)
 {
     uint16_t checksum = 0;
     
@@ -39,7 +45,7 @@ int8_t CheckSum(uint8_t *buffer,int16_t size,uint16_t checksum)
     int8_t state = 0;
     uint16_t checksum_tmp = 0;
     
-    checksum_tmp = GetCheckSum(buffer,size);
+    checksum_tmp = ComputeCheckSum(buffer,size);
     if(checksum_tmp == checksum)
     {
         #ifdef DYNAMENT_DEBUG
@@ -70,7 +76,7 @@ void ReadLiveDataSimple(void)
     tx_buffer[3] = DYNAMENT_DLE;
     tx_buffer[4] = DYNAMENT_EOF;
     
-    checksum = GetCheckSum(tx_buffer, 5);
+    checksum = ComputeCheckSum(tx_buffer, 5);
     tx_buffer[5] = checksum >> 8;
     tx_buffer[6] = checksum;
     

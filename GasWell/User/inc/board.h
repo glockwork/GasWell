@@ -7,24 +7,31 @@
 #define DYNAMENT_DEBUG
 
 /******************************* Define for Dynament ****************************/
-#define STM32_SUCCESS                   (0)
-#define STM32_FAIL                      (-1)
+#define STM32_SUCCESS                       (0)
+#define STM32_FAIL                          (-1)
 
 /******************************* Define for Dynament ****************************/
-#define DYNAMENT_USART                  USART2
+#define DYNAMENT_USART                      USART2
 
 // Dynament USART pins
-#define GPIO_Port_DYNAMENT_USART        GPIOD
-#define GPIO_Pin_DYNAMENT_TX            GPIO_Pin_5
-#define GPIO_Pin_DYNAMENT_RX            GPIO_Pin_6
+#define GPIO_Port_DYNAMENT_USART            GPIOD
+#define GPIO_Pin_DYNAMENT_TX                GPIO_Pin_5
+#define GPIO_Pin_DYNAMENT_RX                GPIO_Pin_6
 
 // Dynament Power pins
-#define GPIO_Port_DYNAMENT_3V3_EN       GPIOB
-#define GPIO_Pin_DYNAMENT_3V3_EN        GPIO_Pin_4
+#define GPIO_Port_DYNAMENT_3V3_EN           GPIOB
+#define GPIO_Pin_DYNAMENT_3V3_EN            GPIO_Pin_4
 
 // Dynament ADC pins
-#define GPIO_Port_ANALOG_IN             GPIOA
-#define GPIO_Pin_ANALOG_IN              GPIO_Pin_1
+#define GPIO_Port_ANALOG_IN                 GPIOA
+#define GPIO_Pin_ANALOG_IN                  GPIO_Pin_1
+
+// Liquid level pins
+#define GPIO_Port_LIQUID_LEVEL              GPIOB
+#define GPIO_Pin_LIQUID_LEVEL               GPIO_Pin_5
+#define EXTI_PortSource_LIQUID_LEVEL        EXTI_PortSourceGPIOB
+#define EXTI_PinSource_LIQUID_LEVEL         GPIO_PinSource5
+#define EXTI_Line_LIQUID_LEVEL              EXTI_Line5
 
 /******************************* Define for  ****************************/
 #define PRINTF_USART                    USART3

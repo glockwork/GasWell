@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file    main.c
-  * @author  È½¾°º£
+  * @author  
   * @version V1.0
   * @date    2014-01-23
   * @brief   Ö÷º¯Êý
@@ -9,9 +9,12 @@
 **/
 
 /* Includes ------------------------------------------------------------------*/
-#include "include.h"
+#include <stdio.h>
+#include "stm32l1xx.h"
 #include "board.h"
+#include "delay.h"
 #include "usart.h"
+#include "liquid_level.h"
 #include "dynament.h"
 #include "dynamentMonitor.h"
 
@@ -30,47 +33,50 @@ uint32_t IDD_Measurement_ADC_ReadValue(void);
 void GPIO_Configuration(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
-    
+
     /* Enable the GPIOs Clock */
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);  
     
     /* Enable the GPIOs Clock */
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE);  
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOD, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
     
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4|GPIO_Pin_5;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_40MHz;
+    GPIO_InitStructure.GPIO_Pin     = GPIO_Pin_4|GPIO_Pin_5;
+    GPIO_InitStructure.GPIO_Mode    = GPIO_Mode_OUT;
+    GPIO_InitStructure.GPIO_Speed   = GPIO_Speed_40MHz;
     GPIO_Init( GPIOC, &GPIO_InitStructure);
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1|GPIO_Pin_2;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_40MHz;
+    GPIO_InitStructure.GPIO_Pin     = GPIO_Pin_0|GPIO_Pin_1|GPIO_Pin_2;
+    GPIO_InitStructure.GPIO_Mode    = GPIO_Mode_OUT;
+    GPIO_InitStructure.GPIO_Speed   = GPIO_Speed_40MHz;
     GPIO_Init( GPIOB, &GPIO_InitStructure);
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2|GPIO_Pin_1|GPIO_Pin_10|GPIO_Pin_0;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_40MHz;
+    GPIO_InitStructure.GPIO_Pin     = GPIO_Pin_2|GPIO_Pin_1|GPIO_Pin_10|GPIO_Pin_0;
+    GPIO_InitStructure.GPIO_Mode    = GPIO_Mode_OUT;
+    GPIO_InitStructure.GPIO_Speed   = GPIO_Speed_40MHz;
     GPIO_Init( GPIOC, &GPIO_InitStructure);
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2|GPIO_Pin_4|GPIO_Pin_3|GPIO_Pin_13;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_40MHz;
+    GPIO_InitStructure.GPIO_Pin     = GPIO_Pin_2|GPIO_Pin_4|GPIO_Pin_3|GPIO_Pin_13;
+    GPIO_InitStructure.GPIO_Mode    = GPIO_Mode_OUT;
+    GPIO_InitStructure.GPIO_Speed   = GPIO_Speed_40MHz;
     GPIO_Init( GPIOD, &GPIO_InitStructure);
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4|GPIO_Pin_10;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_40MHz;
+    GPIO_InitStructure.GPIO_Pin     = GPIO_Pin_4|GPIO_Pin_10;
+    GPIO_InitStructure.GPIO_Mode    = GPIO_Mode_OUT;
+    GPIO_InitStructure.GPIO_Speed   = GPIO_Speed_40MHz;
     GPIO_Init( GPIOB, &GPIO_InitStructure);
     
     // GPIO_Pin_9V_EN
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9V_EN;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_40MHz;
+    GPIO_InitStructure.GPIO_Pin     = GPIO_Pin_9V_EN;
+    GPIO_InitStructure.GPIO_Mode    = GPIO_Mode_OUT;
+    GPIO_InitStructure.GPIO_Speed   = GPIO_Speed_40MHz;
     GPIO_Init(GPIO_Port_9V_EN, &GPIO_InitStructure);
     
     // GPIO_Pin_DYNAMENT_3V3_EN
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_DYNAMENT_3V3_EN;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_40MHz;
+    GPIO_InitStructure.GPIO_Pin     = GPIO_Pin_DYNAMENT_3V3_EN;
+    GPIO_InitStructure.GPIO_Mode    = GPIO_Mode_OUT;
+    GPIO_InitStructure.GPIO_Speed   = GPIO_Speed_40MHz;
     GPIO_Init(GPIO_Port_DYNAMENT_3V3_EN, &GPIO_InitStructure);
+
+    LIQUID_LEVEL_Init();
 }
 /**
   * @brief  Configures the nested vectored interrupt controller.
@@ -89,12 +95,12 @@ void NVIC_Configuration(void)
 //    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 //    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 //    NVIC_Init(&NVIC_InitStructure);
-    
-    /* Enable the Ethernet global Interrupt */
-    NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+
+    /* Enable the Usart2 Interrupt */
+    NVIC_InitStructure.NVIC_IRQChannel                      = USART2_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority    = 2;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority           = 0;
+    NVIC_InitStructure.NVIC_IRQChannelCmd                   = ENABLE;
     NVIC_Init(&NVIC_InitStructure);    
 }
 
