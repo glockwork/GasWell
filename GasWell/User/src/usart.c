@@ -18,7 +18,7 @@ void USART2_Configuration(void)
     /* Enable Dynament RX, TX clocks */
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOD , ENABLE);
     
-    /* Enable USART2 RX, TX clocks */
+    /* Enable DYNAMENT_USART RX, TX clocks */
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2 , ENABLE);
     
     /* Enable DMA1 clock */
@@ -28,32 +28,32 @@ void USART2_Configuration(void)
     GPIO_PinAFConfig(GPIOD ,GPIO_PinSource5,GPIO_AF_USART2);
     GPIO_PinAFConfig(GPIOD ,GPIO_PinSource6,GPIO_AF_USART2);
 
-    /* Configure USART2 Tx as alternate function push-pull */
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+    /* Configure DYNAMENT_USART Tx as alternate function push-pull */
+    GPIO_InitStructure.GPIO_Pin     = GPIO_Pin_5;
+    GPIO_InitStructure.GPIO_Mode    = GPIO_Mode_AF;
+    GPIO_InitStructure.GPIO_Speed   = GPIO_Speed_10MHz;
+    GPIO_InitStructure.GPIO_OType   = GPIO_OType_PP;
+    GPIO_InitStructure.GPIO_PuPd    = GPIO_PuPd_UP;
     GPIO_Init(GPIOD, &GPIO_InitStructure); 
     
-    /* Configure USART2 Rx as alternate function push-pull */
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+    /* Configure DYNAMENT_USART Rx as alternate function push-pull */
+    GPIO_InitStructure.GPIO_Pin     = GPIO_Pin_6;
+    GPIO_InitStructure.GPIO_Mode    = GPIO_Mode_AF;
+    GPIO_InitStructure.GPIO_Speed   = GPIO_Speed_10MHz;
+    GPIO_InitStructure.GPIO_OType   = GPIO_OType_PP;
+    GPIO_InitStructure.GPIO_PuPd    = GPIO_PuPd_UP;
     GPIO_Init(GPIOD, &GPIO_InitStructure); 
     
-    /* USART2 mode config */
-    USART_InitStructure.USART_BaudRate = 38400;
-    USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-    USART_InitStructure.USART_StopBits = USART_StopBits_1;
-    USART_InitStructure.USART_Parity = USART_Parity_No;
-    USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-    USART_InitStructure.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;
-    USART_Init(USART2, &USART_InitStructure); 
+    /* DYNAMENT_USART mode config */
+    USART_InitStructure.USART_BaudRate              = 38400;
+    USART_InitStructure.USART_WordLength            = USART_WordLength_8b;
+    USART_InitStructure.USART_StopBits              = USART_StopBits_1;
+    USART_InitStructure.USART_Parity                = USART_Parity_No;
+    USART_InitStructure.USART_HardwareFlowControl   = USART_HardwareFlowControl_None;
+    USART_InitStructure.USART_Mode                  = USART_Mode_Tx | USART_Mode_Rx;
+    USART_Init(DYNAMENT_USART, &USART_InitStructure); 
 
-    USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+    USART_ITConfig(DYNAMENT_USART, USART_IT_RXNE, ENABLE);
     
 //    /* De-initialise  DMA */
 //    DMA_DeInit(DMA1_Channel6);
@@ -80,13 +80,13 @@ void USART2_Configuration(void)
 
 //    USART_DMACmd(USART2, USART_DMAReq_Rx, ENABLE);
 //    
-    /* Enable USART2 */
-    USART_Cmd(USART2, ENABLE);
+    /* Enable DYNAMENT_USART */
+    USART_Cmd(DYNAMENT_USART, ENABLE);
 }
 
 /*******************************************************************************
-* Function Name  : USART_Configuration
-* Description    : Uasrt Config
+* Function Name  : USART3_Configuration
+* Description    : Uasrt3 Config
 * Input          : None
 * Output         : None
 * Return         : None
@@ -99,48 +99,59 @@ void USART3_Configuration(void)
     /* Enable USART3 port clocks */
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOD , ENABLE);
     
-    /* Enable USART3 TX clocks */
+    /* Enable PRINTF_USART TX clocks */
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
 
     /* Changes the mapping of the PD8 pin */
     GPIO_PinAFConfig(GPIOD ,GPIO_PinSource8,GPIO_AF_USART3);
 
-    /* Configure USART3 Tx as alternate function push-pull */
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-    GPIO_Init(GPIOD, &GPIO_InitStructure); 
+    /* Configure PRINTF_USART Tx as alternate function push-pull */
+    GPIO_InitStructure.GPIO_Pin     = GPIO_Pin_PRINTF_TX;
+    GPIO_InitStructure.GPIO_Mode    = GPIO_Mode_AF;
+    GPIO_InitStructure.GPIO_Speed   = GPIO_Speed_10MHz;
+    GPIO_InitStructure.GPIO_OType   = GPIO_OType_PP;
+    GPIO_InitStructure.GPIO_PuPd    = GPIO_PuPd_UP;
+    GPIO_Init(GPIO_Port_PRINTF, &GPIO_InitStructure); 
 
-    /* USART3 mode config */
-    USART_InitStructure.USART_BaudRate = 115200;
-    USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-    USART_InitStructure.USART_StopBits = USART_StopBits_1;
-    USART_InitStructure.USART_Parity = USART_Parity_No;
-    USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-    USART_InitStructure.USART_Mode = USART_Mode_Tx;
-    USART_Init(USART3, &USART_InitStructure); 
+    /* PRINTF_USART mode config */
+    USART_InitStructure.USART_BaudRate              = 115200;
+    USART_InitStructure.USART_WordLength            = USART_WordLength_8b;
+    USART_InitStructure.USART_StopBits              = USART_StopBits_1;
+    USART_InitStructure.USART_Parity                = USART_Parity_No;
+    USART_InitStructure.USART_HardwareFlowControl   = USART_HardwareFlowControl_None;
+    USART_InitStructure.USART_Mode                  = USART_Mode_Tx;
+    USART_Init(PRINTF_USART, &USART_InitStructure); 
     
     /* Enable USART3 */
-    USART_Cmd(USART3, ENABLE);
-}
-
-void USART_Configuration(void)
-{
-    USART2_Configuration();
-    USART3_Configuration();
+    USART_Cmd(PRINTF_USART, ENABLE);
 }
 
 /*******************************************************************************
-* Function Name  : fputc
-* Description    : Ó³ÉäPrintf
+* Function Name  : USART3_Configuration
+* Description    : Uasrt3 Config
+* Input          : None
+* Output         : None
+* Return         : None
+*******************************************************************************/
+void USART_Configuration(void)
+{
+    /* Enable USART3 for dynament's sensor */
+    USART2_Configuration();
+    
+    /* Enable USART3 for printf function */
+    USART3_Configuration();
+}
+/*******************************************************************************
+* @brief   Mapping to printf
+* @param   ch:  the char to be transmitted
+* @param   f:  
+* @retval  the char to be transmitted
 *******************************************************************************/
 int fputc(int ch, FILE *f)
 {
 	uint32_t  TimeCnt=0;
 	
-	USART_SendData(USART3, (unsigned char) ch);
+	USART_SendData(PRINTF_USART, (unsigned char) ch);
 	TimeCnt = 16000;
 	while ((!(USART3->SR & USART_FLAG_TXE)) && (TimeCnt != 0))
 	{
@@ -149,19 +160,12 @@ int fputc(int ch, FILE *f)
     return (ch);
 }
 
-void Usart_SendStrings(uint8_t *str)
-{
-    uint8_t i=0;
-    uint8_t ch = *str;
-    
-    while(ch != '\0')
-    {
-        ch = str[i++];
-        USART_SendData(USART3,ch);
-        while (!(USART3->SR & USART_FLAG_TXE));
-    }
-}
-
+/*******************************************************************************
+* @brief   Send data through Usart2
+* @param   str:  the buffer to be transmitted
+* @param   len:  the size to be transmitted
+* @retval  void
+*******************************************************************************/
 void Usart2_SendData(uint8_t *str, int16_t len)
 {
     uint8_t i=0;
