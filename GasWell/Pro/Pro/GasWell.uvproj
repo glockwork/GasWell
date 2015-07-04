@@ -446,10 +446,20 @@
               <FileType>1</FileType>
               <FilePath>..\..\User\src\led_display.c</FilePath>
             </File>
+            <File>
+              <FileName>mg323.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\src\mg323.c</FilePath>
+            </File>
+            <File>
+              <FileName>usr_trace.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\src\usr_trace.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>StdPeriph_Driver</GroupName>
+          <GroupName>StdPeriph_lib</GroupName>
           <Files>
             <File>
               <FileName>misc.c</FileName>

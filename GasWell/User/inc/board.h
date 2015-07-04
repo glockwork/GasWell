@@ -89,7 +89,10 @@
 #define GPIO_Port_9V_EN                 GPIOC
 #define GPIO_Pin_9V_EN                  GPIO_Pin_1
 
-/******************************* Define for  ****************************/
+/**************************** Define for MG323 Module ***********************/
+#define GPIO_Port_MG323_RESET           GPIOD
+#define GPIO_Pin_MG323_RESET            GPIO_Pin_14
+
 
 
 

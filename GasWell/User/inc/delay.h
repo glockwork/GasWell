@@ -10,9 +10,10 @@
 #ifndef _DELAY_H_
 #define _DELAY_H_
 
-#include "include.h"
+#include <stdint.h>
 
 void Delay_ms(uint32_t ms);
+void Delay_us(uint32_t num);
 
 #endif
 

@@ -98,6 +98,11 @@ void ReadLiveDataSimple(void)
     Usart2_SendData(tx_buffer, sizeof(tx_buffer));
 }
 
+/*******************************************************************************
+* @brief   Convert a unsigned int 32-bit  to a float.
+* @param   temp:  the data to be converted
+* @retval  a float data
+*******************************************************************************/
 float Convertu32Tofloat(uint32_t temp)
 {
     u32orfloat_u u32orfloat;

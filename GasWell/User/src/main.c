@@ -17,6 +17,7 @@
 #include "liquid_level.h"
 #include "dynament.h"
 #include "dynamentMonitor.h"
+#include "include.h"
 
 /* Private function prototypes -----------------------------------------------*/
 void GPIO_Configuration(void)
@@ -76,6 +77,7 @@ void GPIO_Configuration(void)
 
     LIQUID_LEVEL_Init();
 }
+
 /**
   * @brief  Configures the nested vectored interrupt controller.
   * @param  None
@@ -131,6 +133,7 @@ void NVIC_Configuration(void)
 ****************************************************************************/
 int main(void)
 {	
+    usr_trace_init();
     GPIO_Configuration();
     USART_Configuration();
     NVIC_Configuration();
@@ -156,7 +159,7 @@ int main(void)
     while(1)
 	{
 //        DynamentVoltDetect();
-        GetLiveData();
+//        GetLiveData();
         Delay_ms(500);
 	}
 }
